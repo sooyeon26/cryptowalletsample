@@ -5,6 +5,8 @@ import android.databinding.ObservableBoolean;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.samsung.android.sdk.coldwallet.Scw;
+import com.samsung.android.sdk.coldwallet.ScwCoinType;
 import com.samsung.android.sdk.coldwallet.ScwService;
 import com.samsung.open_crypto_wallet_app.view.AlertUtil;
 import com.samsung.open_crypto_wallet_app.view_model.AccountViewModel;
@@ -17,6 +19,7 @@ import org.web3j.crypto.WalletUtils;
 import org.web3j.tx.ChainId;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KeyStoreManager {
@@ -132,8 +135,22 @@ public class KeyStoreManager {
         Log.i(Util.LOG_TAG, "Init SBK to read address with " + hdPath);
         if (isSBKSupported()) {
             // TODO : Get My Ethereum Address with Keystore
-            // success, Update DBManager > DBManager.onGetAddressSuccess(publicAddress);
-            // fail, show alert with errorCode > AlertUtil.handleSBKError(errorCode);
+
+            ArrayList<String> hdPathList = new ArrayList<>();
+            hdPathList.add(hdPath);
+
+            ScwService.getInstance().getAddressList(new ScwService.ScwGetAddressListCallback() {
+                @Override
+                public void onSuccess(List<String> addressList) {
+                    String publicAddress = addressList.get(0);
+                    DBManager.onGetAddressSuccess(publicAddress);
+                }
+
+                @Override
+                public void onFailure(int errorCode, @Nullable String s) {
+                    AlertUtil.handleSBKError(errorCode);
+                }
+            }, hdPathList);
         }
     }
 
@@ -156,8 +173,18 @@ public class KeyStoreManager {
         Log.i(Util.LOG_TAG, "Init SBK to sign transaction");
         if (isSBKSupported()) {
             // TODO : Sign Transaction with Keystore
-            // Success, Set signed tx to TransactionViewModel > TransactionViewModel.setSignedTransaction(bytes);
-            // Fail, Show alert with error code > AlertUtil.handleSBKError(errorCode);
+            ScwService.getInstance().signEthTransaction(new ScwService.ScwSignEthTransactionCallback() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    TransactionViewModel.setSignedTransaction(bytes);
+                }
+
+                @Override
+                public void onFailure(int errorCode, @Nullable String s) {
+                    AlertUtil.handleSBKError(errorCode);
+                }
+            }, unsignedTransaction, ScwService.getHdPath(ScwCoinType.ETH, 0));
+
         }
     }
 
