@@ -121,9 +121,8 @@ public class DBManager {
 
         if(!SharedPreferenceManager.getUseOtherKeyManager(mNavActivityInstance)) {
 
-            // TODO : Get HDPath with Keystore
-            // String hdPath =  ScwService.getHdPath(ScwCoinType.ETH, 0);
-            mAccountModel.setHdPath(hdPath);
+            // TODO : Get HDPath from Keystore using getHdPath API and ScwCoinType class
+            //mAccountModel.setHdPath(hdPath);
 
             // Get Public Address from SBK for specific HDpath
             KeyStoreManager.getInstance(mNavActivityInstance).getPublicAddress(mAccountModel.getHdPath());
