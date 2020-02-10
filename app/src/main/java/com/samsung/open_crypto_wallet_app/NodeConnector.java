@@ -62,6 +62,8 @@ public class NodeConnector {
     }
 
     public void getBalance(String publicAddress) {
+        // TODO : Get Balance with Web3j
+        /*
         CompletableFuture<EthGetBalance> ethGetBalanceCompletableFuture;
 
         ethGetBalanceCompletableFuture = web3jNode.ethGetBalance(publicAddress, DefaultBlockParameterName.LATEST).sendAsync();
@@ -75,6 +77,7 @@ public class NodeConnector {
             AccountViewModel.setBalance(fetchedBalance);
             return ethGetBalance;       //dummy return
         });
+         */
     }
 
     //Call shutdown to free resource
@@ -90,6 +93,8 @@ public class NodeConnector {
     }
 
     public void sendTransaction(byte[] signedTransaction) {
+        // TODO : Send Transaction with Web3j
+        /*
         String transactionToSend = Numeric.toHexString(signedTransaction);
 
         CompletableFuture<EthSendTransaction> transactionRequest = web3jNode.ethSendRawTransaction(transactionToSend).sendAsync();
@@ -103,6 +108,7 @@ public class NodeConnector {
             TransactionViewModel.setTransactionHash(ethSendTransaction.getTransactionHash());
             return signedTransaction;           //dummy return
         });
+         */
     }
 
 }

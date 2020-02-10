@@ -24,8 +24,6 @@ public class KeyStoreManager {
     private static KeyStoreManager keyStoreManagerInstance;
     private ScwService mScwService;
     private ScwService.ScwCheckForMandatoryAppUpdateCallback mScwCheckForMandatoryAppUpdateCallback;
-    private ScwService.ScwGetAddressListCallback mScwGetAddressListCallback;
-    private ScwService.ScwSignEthTransactionCallback mScwSignEthTransactionCallback;
 
     private static final String CREDENTIAL_DIR = ".credentials";
     private static final String CREDENTIAL_FILE_PATH_KEY = "credential_key";
@@ -82,49 +80,6 @@ public class KeyStoreManager {
         } else return false;
     }
 
-    private ScwService.ScwGetAddressListCallback getSCWGetAddressListCallback() {
-        //Code for creating callback if not already created
-        if (mScwGetAddressListCallback == null) {
-            mScwGetAddressListCallback = new ScwService.ScwGetAddressListCallback() {
-
-                @Override
-                public void onSuccess(List<String> addressList) {
-                    String publicAddress = addressList.get(0);
-                    Log.i(Util.LOG_TAG, "Address from SBK is : " + publicAddress);
-                    DBManager.onGetAddressSuccess(publicAddress);
-                }
-
-                @Override
-                public void onFailure(int errorCode, @Nullable String errorMsg) {
-                    Log.e(Util.LOG_TAG, "Error Code: " + errorCode);
-                    AlertUtil.handleSBKError(errorCode);
-                }
-
-            };
-        }
-        return mScwGetAddressListCallback;
-    }
-
-
-    private ScwService.ScwSignEthTransactionCallback getScwSignEthTransactionCallback() {
-        //Code for creating callback if not already created
-        if (mScwSignEthTransactionCallback == null) {
-            mScwSignEthTransactionCallback = new ScwService.ScwSignEthTransactionCallback() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Log.i(Util.LOG_TAG, "Signing Successful!");
-                    TransactionViewModel.setSignedTransaction(bytes);
-                }
-
-                @Override
-                public void onFailure(int errorCode, @Nullable String errorMsg) {
-                    Log.e(Util.LOG_TAG, "Error Code: " + errorCode);
-                    AlertUtil.handleSBKError(errorCode);
-                }
-            };
-        }
-        return mScwSignEthTransactionCallback;
-    }
 
     private ScwService.ScwCheckForMandatoryAppUpdateCallback getCheckMandatoryUpdateRequiredCallback(ObservableBoolean mIsMandatoryUpdateRequired, ObservableBoolean mIsCheckUpdateCompleted) {
         mScwCheckForMandatoryAppUpdateCallback = new ScwService.ScwCheckForMandatoryAppUpdateCallback() {
@@ -176,7 +131,23 @@ public class KeyStoreManager {
     public void getPublicAddress(String hdPath) {
         Log.i(Util.LOG_TAG, "Init SBK to read address with " + hdPath);
         if (isSBKSupported()) {
-            mScwService.getAddressList(getSCWGetAddressListCallback(), Util.stringToArrayList(hdPath));
+            // TODO : Get My Ethereum Address with Keystore
+            mScwService.getAddressList(new ScwService.ScwGetAddressListCallback() {
+
+                @Override
+                public void onSuccess(List<String> addressList) {
+                    String publicAddress = addressList.get(0);
+                    Log.i(Util.LOG_TAG, "Address from SBK is : " + publicAddress);
+                    DBManager.onGetAddressSuccess(publicAddress);
+                }
+
+                @Override
+                public void onFailure(int errorCode, @Nullable String errorMsg) {
+                    Log.e(Util.LOG_TAG, "Error Code: " + errorCode);
+                    AlertUtil.handleSBKError(errorCode);
+                }
+
+            }, Util.stringToArrayList(hdPath));
         }
     }
 
@@ -198,7 +169,22 @@ public class KeyStoreManager {
     public void signTransaction(byte[] unsignedTransaction) {
         Log.i(Util.LOG_TAG, "Init SBK to sign transaction");
         if (isSBKSupported()) {
-            mScwService.signEthTransaction(getScwSignEthTransactionCallback(), unsignedTransaction, AccountViewModel.getDefaultHDPath());
+            // TODO : Sign Transaction with Keystore
+            /*
+            mScwService.signEthTransaction(new ScwService.ScwSignEthTransactionCallback() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Log.i(Util.LOG_TAG, "Signing Successful!");
+                    TransactionViewModel.setSignedTransaction(bytes);
+                }
+
+                @Override
+                public void onFailure(int errorCode, @Nullable String errorMsg) {
+                    Log.e(Util.LOG_TAG, "Error Code: " + errorCode);
+                    AlertUtil.handleSBKError(errorCode);
+                }
+            }, unsignedTransaction, AccountViewModel.getDefaultHDPath());
+             */
         }
     }
 
