@@ -132,24 +132,8 @@ public class KeyStoreManager {
         Log.i(Util.LOG_TAG, "Init SBK to read address with " + hdPath);
         if (isSBKSupported()) {
             // TODO : Get My Ethereum Address with Keystore
-            /*
-            mScwService.getAddressList(new ScwService.ScwGetAddressListCallback() {
-
-                @Override
-                public void onSuccess(List<String> addressList) {
-                    String publicAddress = addressList.get(0);
-                    Log.i(Util.LOG_TAG, "Address from SBK is : " + publicAddress);
-                    DBManager.onGetAddressSuccess(publicAddress);
-                }
-
-                @Override
-                public void onFailure(int errorCode, @Nullable String errorMsg) {
-                    Log.e(Util.LOG_TAG, "Error Code: " + errorCode);
-                    AlertUtil.handleSBKError(errorCode);
-                }
-
-            }, Util.stringToArrayList(hdPath));
-             */
+            // success, Update DBManager > DBManager.onGetAddressSuccess(publicAddress);
+            // fail, show alert with errorCode > AlertUtil.handleSBKError(errorCode);
         }
     }
 
@@ -172,21 +156,8 @@ public class KeyStoreManager {
         Log.i(Util.LOG_TAG, "Init SBK to sign transaction");
         if (isSBKSupported()) {
             // TODO : Sign Transaction with Keystore
-            /*
-            mScwService.signEthTransaction(new ScwService.ScwSignEthTransactionCallback() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Log.i(Util.LOG_TAG, "Signing Successful!");
-                    TransactionViewModel.setSignedTransaction(bytes);
-                }
-
-                @Override
-                public void onFailure(int errorCode, @Nullable String errorMsg) {
-                    Log.e(Util.LOG_TAG, "Error Code: " + errorCode);
-                    AlertUtil.handleSBKError(errorCode);
-                }
-            }, unsignedTransaction, AccountViewModel.getDefaultHDPath());
-             */
+            // Success, Set signed tx to TransactionViewModel > TransactionViewModel.setSignedTransaction(bytes);
+            // Fail, Show alert with error code > AlertUtil.handleSBKError(errorCode);
         }
     }
 

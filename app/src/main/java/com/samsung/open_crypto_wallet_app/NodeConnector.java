@@ -62,7 +62,7 @@ public class NodeConnector {
     }
 
     public void getBalance(String publicAddress) {
-        // TODO : Get Balance with Web3j
+        // TODO : Get Balance with Web3j (Live code)
         /*
         CompletableFuture<EthGetBalance> ethGetBalanceCompletableFuture;
 
@@ -93,7 +93,7 @@ public class NodeConnector {
     }
 
     public void sendTransaction(byte[] signedTransaction) {
-        // TODO : Send Transaction with Web3j
+        // TODO : Send Transaction with Web3j(Live code)
         /*
         String transactionToSend = Numeric.toHexString(signedTransaction);
 
