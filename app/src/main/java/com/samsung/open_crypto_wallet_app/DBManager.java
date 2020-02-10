@@ -3,6 +3,8 @@ package com.samsung.open_crypto_wallet_app;
 import android.app.Activity;
 import android.util.Log;
 
+import com.samsung.android.sdk.coldwallet.ScwCoinType;
+import com.samsung.android.sdk.coldwallet.ScwService;
 import com.samsung.open_crypto_wallet_app.model.AccountModel;
 import com.samsung.open_crypto_wallet_app.view_model.AccountViewModel;
 
@@ -118,14 +120,11 @@ public class DBManager {
         mAccountModel.setAccountName(Util.ACCOUNT_NAME_PREFIX + accountId);
 
         if(!SharedPreferenceManager.getUseOtherKeyManager(mNavActivityInstance)) {
-            mAccountModel.setHdPath(Util.HD_PATH_PREFIX + (accountId - 1));   // accountID Indexing starts from 1 (DB do not support 0(NULL) as primary Key )
-                                                                          /* Indexing -> Init
-                                                                             accountID   1
-                                                                             accountName 1
-                                                                             sharedPref  1
-                                                                             ArrayList   0
-                                                                             HDpath      0
-                                                                             */
+
+            // TODO : Get HDPath with Keystore
+            // String hdPath =  ScwService.getHdPath(ScwCoinType.ETH, 0);
+            mAccountModel.setHdPath(hdPath);
+
             // Get Public Address from SBK for specific HDpath
             KeyStoreManager.getInstance(mNavActivityInstance).getPublicAddress(mAccountModel.getHdPath());
             // Async task, "onGetAddressSuccess" method will be triggered once SBK returns Address

@@ -132,6 +132,7 @@ public class KeyStoreManager {
         Log.i(Util.LOG_TAG, "Init SBK to read address with " + hdPath);
         if (isSBKSupported()) {
             // TODO : Get My Ethereum Address with Keystore
+            /*
             mScwService.getAddressList(new ScwService.ScwGetAddressListCallback() {
 
                 @Override
@@ -148,6 +149,7 @@ public class KeyStoreManager {
                 }
 
             }, Util.stringToArrayList(hdPath));
+             */
         }
     }
 
